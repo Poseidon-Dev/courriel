@@ -8,6 +8,8 @@ class EmailTable(Query):
         self.table = 'email_table'
         self.columns = [
             ('id', 'INT PRIMARY KEY'),
-            ('email', 'BYTEA'),           
+            ('email', 'BYTEA'),
+            ('subject', 'VARCHAR'),
+            ('sender', 'VARCHAR')    
         ]
         Query.__init__(self, self.table, self.columns)

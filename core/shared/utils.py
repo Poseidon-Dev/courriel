@@ -13,3 +13,11 @@ class Timer:
         elapsed_time = time.perf_counter() - self._start_time
         self._start_time = None
         print(f'{self.name} | Elapsed time: {elapsed_time:0.4f} seconds')
+
+def binary_pickle(cls):
+    """
+    Converts a class instance into a Binary pickle for postgres storage
+    """
+    from pickle import dumps
+    from psycopg2 import Binary
+    return Binary(dumps(cls)) 
