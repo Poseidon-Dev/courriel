@@ -10,6 +10,7 @@ class EmailTable(Query):
             ('id', 'INT PRIMARY KEY'),
             ('email', 'BYTEA'),
             ('subject', 'VARCHAR'),
-            ('sender', 'VARCHAR')    
+            ('sender', 'VARCHAR'), 
+            ('recipient', 'VARCHAR'), 
         ]
         Query.__init__(self, self.table, self.columns)

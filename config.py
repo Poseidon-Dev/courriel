@@ -16,3 +16,5 @@ EMAIL_SMTP = os.getenv('EMAIL_SMTP')
 EMAIL_SMTP_PORT = int(os.getenv('EMAIL_SMTP_PORT'))
 EMAIL_IMAP = os.getenv('EMAIL_IMAP')
 EMAIL_IMAP_PORT = int(os.getenv('EMAIL_IMAP_PORT'))
+
+ACCEPTED_DOMAIN = ['arizonapipeline.com']

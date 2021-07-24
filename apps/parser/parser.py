@@ -1,37 +1,37 @@
 from imap_tools import MailBox, A, O, N, H, U
 
 from apps.parser import EmailTable
+from apps.parser.utils import binary_pickle, check_domain
 
-from core.config import EMAIL_IMAP, EMAIL_UID, EMAIL_PWD
-from core.shared.utils import binary_pickle
+from config import EMAIL_IMAP, EMAIL_UID, EMAIL_PWD
 
-class EmailLogger:
+class EmailMixin:
 
-    def __init__(self, sender: str=None, subject: str=None):
-        self.sender = sender
-        self.subject = subject
+    def __init__(self, folder: str='INBOX'):
+        self.folder = folder
+        self.mailbox = MailBox(EMAIL_IMAP).login(EMAIL_UID, EMAIL_PWD, initial_folder=self.folder)
+        self.email = ''
 
-    def pull_email(self):
-        with MailBox(EMAIL_IMAP).login(EMAIL_UID, EMAIL_PWD) as mailbox:
-            if self.sender:
-                email_pull = mailbox.fetch(A(sender=self.sender,seen=False), mark_seen=True)
-            elif self.subject:
-                email_pull = mailbox.fetch(A(subject=self.subject,seen=False), mark_seen=True)
-            else:
-                email_pull = mailbox.fetch(seen=False, mark_seen=True)
+    def _test_connection(self):
+        return self.mailbox.login_result
 
-            for e in email_pull:
-                e_pickle = binary_pickle(e)
+    def log_email(self, email_objs):
+        for e in email_objs:
+            sender = check_domain(e.from_)
+            recipient = check_domain(e.to[0])
+            if sender and recipient:
+                pickle_email = binary_pickle(e)
                 EmailTable().insert(
-                    ['id', 'email', 'subject', 'sender'],
-                    [e.uid, e_pickle, e.subject, e.from_]
+                    ['id', 'email', 'subject', 'sender', 'recipient'],
+                    [e.uid, pickle_email, e.subject.lower(), sender, recipient]
                 )
-
-
-
-    def log_email(self):
-        email = self.pull_email()
-        
     
+    def delete_email(self, sender:str=None, subject:str=None):
+        self.mailbox.delete([msg.uid for msg in self.pull_email(sender, subject)])
+        return True
 
+class EmailLogger(EmailMixin):
 
+    def __init__(self, folder: str='INBOX'):
+        super().__init__(folder)
+        self.email = self.mailbox.fetch(A(seen=False), mark_seen=True)

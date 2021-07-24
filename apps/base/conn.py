@@ -1,16 +1,16 @@
 import psycopg2
-import core.config
+import config
 
 import apps.base.exceptions as BaseErr
 
 class DBConnection:
 
     def __init__(self):
-        self.host = core.config.PG_HOST
-        self.db_name = core.config.PG_DB[0]
-        self.user = core.config.PG_USR[0]
-        self.pwd = core.config.PG_PWD[0]
-        self.port = core.config.PG_PORT
+        self.host = config.PG_HOST
+        self.db_name = config.PG_DB[0]
+        self.user = config.PG_USR[0]
+        self.pwd = config.PG_PWD[0]
+        self.port = config.PG_PORT
 
 
     def conn(self):
