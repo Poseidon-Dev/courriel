@@ -24,7 +24,7 @@ class EmailMixin:
                 pickle_email = binary_pickle(e)
                 EmailTable().insert(
                     ['id', 'email', 'subject', 'sender', 'recipient', 'local_read'],
-                    [e.uid, pickle_email, e.subject.lower(), sender, recipient, 0]
+                    [e.uid, pickle_email, e.subject.lower(), sender, recipient, False]
                 )
     
     def delete_email(self, sender:str=None, subject:str=None):
