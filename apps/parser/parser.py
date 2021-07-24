@@ -42,7 +42,9 @@ class EmailLogger(EmailMixin):
         Fetches all unread email from mailbox and store in local DB
         """
         while True:
-            self.email = self.mailbox.fetch(A(seen=False), mark_seen=True)
+            mailbox = MailBox(EMAIL_IMAP).login(EMAIL_UID, EMAIL_PWD, initial_folder=self.folder)
+            self.email = mailbox.fetch(A(seen=False), mark_seen=True)
             self.log_email(self.email)
+            mailbox.logout()
             await asyncio.sleep(1)
 
