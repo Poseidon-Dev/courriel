@@ -1,7 +1,4 @@
 from pickle import loads
-from apps import emailtests
 from apps.emailtests import EmailTests
+from apps.parser import EmailLogger
 
-email_tests = EmailTests().fetch()
-for e in email_tests:
-    print(e)

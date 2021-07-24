@@ -34,4 +34,11 @@ class EmailLogger(EmailMixin):
 
     def __init__(self, folder: str='INBOX'):
         super().__init__(folder)
+
+    def run(self):
+        """
+        Fetches all unread email from mailbox and store in local DB
+        """
         self.email = self.mailbox.fetch(A(seen=False), mark_seen=True)
+        self.log_email(self.email)
+
