@@ -11,6 +11,7 @@ class EmailTable(Query):
             ('email', 'BYTEA'),
             ('subject', 'VARCHAR'),
             ('sender', 'VARCHAR'), 
-            ('recipient', 'VARCHAR'), 
+            ('recipient', 'VARCHAR'),
+            ('local_read', 'BOOLEAN'),
         ]
         Query.__init__(self, self.table, self.columns)
