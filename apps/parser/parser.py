@@ -1,7 +1,8 @@
+import asyncio
 from imap_tools import MailBox, A, O, N, H, U
 
 from apps.parser import EmailTable
-from apps.parser.utils import binary_pickle, check_domain
+from apps.parser.utils import binary_pickle, check_domain, loop
 
 from config import EMAIL_IMAP, EMAIL_UID, EMAIL_PWD
 
@@ -35,10 +36,13 @@ class EmailLogger(EmailMixin):
     def __init__(self, folder: str='INBOX'):
         super().__init__(folder)
 
-    def run(self):
+    @loop
+    async def run(self):
         """
         Fetches all unread email from mailbox and store in local DB
         """
-        self.email = self.mailbox.fetch(A(seen=False), mark_seen=True)
-        self.log_email(self.email)
+        while True:
+            self.email = self.mailbox.fetch(A(seen=False), mark_seen=True)
+            self.log_email(self.email)
+            await asyncio.sleep(1)
 
