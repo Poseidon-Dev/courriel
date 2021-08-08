@@ -1,4 +1,4 @@
-import os, psycopg2
+import os
 
 STARTUP_APPS = [
 

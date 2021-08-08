@@ -13,6 +13,7 @@ venv.bak/
 
 media/
 
+*.log
 *.db
 
 volumnes/

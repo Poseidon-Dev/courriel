@@ -6,6 +6,10 @@ from apps.parser.utils import binary_pickle, check_domain, loop
 
 from config import EMAIL_IMAP, EMAIL_UID, EMAIL_PWD
 
+import logging
+
+logging.basicConfig(filename='tests.log', encoding='utf-8', level=logging.DEBUG)
+logging.debug("Starting log file")
 class EmailMixin:
 
     def __init__(self, folder: str='INBOX'):
@@ -21,6 +25,7 @@ class EmailMixin:
             sender = check_domain(e.from_)
             recipient = check_domain(e.to[0])
             if sender and recipient:
+                logging.debug(f'found email from {sender} directed at {recipient}')
                 pickle_email = binary_pickle(e)
                 EmailTable().insert(
                     ['id', 'email', 'subject', 'sender', 'recipient', 'local_read'],
