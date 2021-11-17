@@ -1,4 +1,5 @@
 import asyncio
+import time
 from imap_tools import MailBox, A, O, N, H, U
 
 from apps.parser import EmailTable
@@ -10,6 +11,7 @@ import logging
 
 logging.basicConfig(filename='tests.log', encoding='utf-8', level=logging.DEBUG)
 logging.debug("Starting log file")
+
 class EmailMixin:
 
     def __init__(self, folder: str='INBOX'):
@@ -41,8 +43,7 @@ class EmailLogger(EmailMixin):
     def __init__(self, folder: str='INBOX'):
         super().__init__(folder)
 
-    @loop
-    async def run(self):
+    def run(self):
         """
         Fetches all unread email from mailbox and store in local DB
         """
@@ -51,5 +52,5 @@ class EmailLogger(EmailMixin):
             self.email = mailbox.fetch(A(seen=False), mark_seen=True)
             self.log_email(self.email)
             mailbox.logout()
-            await asyncio.sleep(1)
+            time.sleep(2)
 
